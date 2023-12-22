@@ -51,16 +51,16 @@ var searchFunc = function(path, searchId, contentId) {
 
   $.ajax({
     url: path,
-    dataType: "xml",
-    success: function(xmlResponse) {
+    dataType: "json",
+    success: function(datas) {
       // get the contents from search data
-      var datas = $("entry", xmlResponse).map(function() {
-        return {
-          title: $("title", this).text(),
-          content: $("content", this).text(),
-          url: $("link", this).attr("href")
-        };
-      }).get();
+      // var datas = $("entry", xmlResponse).map(function() {
+      //   return {
+      //     title: $("title", this).text(),
+      //     content: $("content", this).text(),
+      //     url: $("link", this).attr("href")
+      //   };
+      //  }).get();
 
       var $input = document.getElementById(searchId);
       if (!$input) { return; }
