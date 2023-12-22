@@ -1322,6 +1322,11 @@ article .content .caption {
   #footer .footer-right {
     align-self: flex-end;
   }
+  #footer .busuanzi {
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+  }
 }
 .pagination {
   display: inline-block;
